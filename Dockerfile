@@ -56,11 +56,10 @@ ENV N8N_HOST=0.0.0.0
 ENV N8N_PORT=5678
 ENV GENERIC_TIMEZONE=UTC
 
-# Create a basic Remotion project
-WORKDIR /app/remotion-projects
-RUN npx create-video --template=blank my-template
+# Copy your local remotion project into the container
+COPY remotion-projects/remotion-template /app/remotion-projects/my-template
 
-# Install additional Remotion dependencies that might be needed
+# Move into the copied project directory and install additional Remotion dependencies
 WORKDIR /app/remotion-projects/my-template
 RUN npm install @remotion/media-utils @remotion/shapes @remotion/transitions
 
