@@ -1,41 +1,25 @@
-# Use Node.js 18 as base image
-FROM node:18-bullseye
+# Use Node.js 18 Alpine (much smaller base image)
+FROM node:18-alpine
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install system dependencies and chromium, ffmpeg
+RUN apk add --no-cache \
     python3 \
-    python3-pip \
+    py3-pip \
     ffmpeg \
-    wget \
-    gnupg \
+    chromium \
+    nss \
+    harfbuzz \
     ca-certificates \
-    fonts-liberation \
-    libasound2 \
-    libatk-bridge2.0-0 \
-    libdrm2 \
-    libgtk-3-0 \
-    libnss3 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxrandr2 \
-    xdg-utils \
-    libxss1 \
-    libgconf-2-4 \
-    libxtst6 \
-    libatspi2.0-0 \
-    libappindicator3-1 \
-    libsecret-1-0 \
-    && rm -rf /var/lib/apt/lists/*
+    ttf-freefont \
+    bash \
+    curl \
+    git \
+    # Clean up
+    && rm -rf /var/cache/apk/*
 
-# Install Google Chrome instead of Chromium for better compatibility
-RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install yt-dlp
-RUN pip3 install yt-dlp
+# Set environment variables for Puppeteer/Remotion to use chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Set working directory
 WORKDIR /app
@@ -43,42 +27,35 @@ WORKDIR /app
 # Install n8n globally
 RUN npm install -g n8n@latest
 
-# Install Remotion globally
+# Install Remotion CLI globally
 RUN npm install -g @remotion/cli@latest
 
-# Create directory structure
+# Create needed directories
 RUN mkdir -p /app/workflows /app/remotion-projects /app/downloads /app/renders
 
-# Set environment variables
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
-ENV N8N_HOST=0.0.0.0
-ENV N8N_PORT=5678
-ENV GENERIC_TIMEZONE=UTC
-
-# Copy your local remotion project into the container
+# Copy your local remotion project to container
 COPY remotion-projects/remotion-template /app/remotion-projects/my-template
 
-# Move into the copied project directory and install additional Remotion dependencies
+# Install additional Remotion dependencies inside the project
 WORKDIR /app/remotion-projects/my-template
 RUN npm install @remotion/media-utils @remotion/shapes @remotion/transitions
 
-# Switch back to main app directory
+# Switch back to app root
 WORKDIR /app
 
-# Create startup script directly in the container
-RUN echo '#!/bin/bash\n\
+# Create startup script
+RUN echo '#!/bin/sh\n\
 echo "Starting n8n..."\n\
 n8n start &\n\
 echo "n8n started on port 5678"\n\
-echo "You can start Remotion Studio manually if needed:"\n\
-echo "  docker exec -it remotion-n8n-container bash"\n\
+echo "To start Remotion Studio manually:"\n\
+echo "  docker exec -it remotion-n8n-container sh"\n\
 echo "  cd /app/remotion-projects/my-template"\n\
 echo "  npm start"\n\
 tail -f /dev/null' > /app/start.sh && chmod +x /app/start.sh
 
-# Expose ports
+# Expose ports for n8n and Remotion studio
 EXPOSE 5678 3000
 
-# Start services
+# Start the container with startup script
 CMD ["/app/start.sh"]
