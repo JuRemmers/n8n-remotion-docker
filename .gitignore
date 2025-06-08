@@ -1,0 +1,11 @@
+# Ignore built files and media
+downloads/*
+renders/*
+node_modules/
+*.log
+
+# Allow empty folders to be committed
+!downloads/.gitkeep
+!renders/.gitkeep
+!workflows/.gitkeep
+!remotion-projects/.gitkeep

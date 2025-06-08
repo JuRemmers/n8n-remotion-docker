@@ -1,0 +1,4 @@
+touch downloads/.gitkeep
+touch renders/.gitkeep
+touch workflows/.gitkeep
+touch remotion-projects/.gitkeep

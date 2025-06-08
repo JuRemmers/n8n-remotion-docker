@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  remotion-n8n:
+    build: .
+    ports:
+      - "5678:5678"    # n8n
+      - "3000:3000"    # Remotion Studio (if needed)
+    volumes:
+      - ./workflows:/app/workflows
+      - ./downloads:/app/downloads
+      - ./renders:/app/renders
+      - ./remotion-projects:/app/remotion-projects
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - GENERIC_TIMEZONE=UTC
+    restart: unless-stopped
