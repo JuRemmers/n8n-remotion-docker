@@ -1,4 +1,4 @@
-ROM node:18-alpine
+FROM node:18-alpine
 
 # Install dependencies
 RUN apk add --no-cache \
