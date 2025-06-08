@@ -1,7 +1,6 @@
-# Use Node.js 18 Alpine (much smaller base image)
-FROM node:18-alpine
+ROM node:18-alpine
 
-# Install system dependencies and chromium, ffmpeg
+# Install dependencies
 RUN apk add --no-cache \
     python3 \
     py3-pip \
@@ -14,48 +13,41 @@ RUN apk add --no-cache \
     bash \
     curl \
     git \
-    # Clean up
     && rm -rf /var/cache/apk/*
 
-# Set environment variables for Puppeteer/Remotion to use chromium
+# Set environment variables
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Set working directory
 WORKDIR /app
 
-# Install n8n globally
-RUN npm install -g n8n@latest
+# Install global packages
+RUN npm install -g n8n@latest @remotion/cli@latest
 
-# Install Remotion CLI globally
-RUN npm install -g @remotion/cli@latest
-
-# Create needed directories
-RUN mkdir -p /app/workflows /app/remotion-projects /app/downloads /app/renders
-
-# Copy your local remotion project to container
+# Copy your local Remotion project into the container
 COPY remotion-projects/remotion-template /app/remotion-projects/my-template
 
-# Install additional Remotion dependencies inside the project
+# Install dependencies inside Remotion project
 WORKDIR /app/remotion-projects/my-template
 RUN npm install @remotion/media-utils @remotion/shapes @remotion/transitions
 
-# Switch back to app root
+# Go back to app root
 WORKDIR /app
 
-# Create startup script
-RUN echo '#!/bin/sh\n\
-echo "Starting n8n..."\n\
-n8n start &\n\
-echo "n8n started on port 5678"\n\
-echo "To start Remotion Studio manually:"\n\
-echo "  docker exec -it remotion-n8n-container sh"\n\
-echo "  cd /app/remotion-projects/my-template"\n\
-echo "  npm start"\n\
-tail -f /dev/null' > /app/start.sh && chmod +x /app/start.sh
+# Create a reliable startup script
+RUN echo '#!/bin/sh' > /start.sh && \
+    echo 'echo "Starting n8n..."' >> /start.sh && \
+    echo 'n8n start &' >> /start.sh && \
+    echo 'echo "n8n started on port 5678"' >> /start.sh && \
+    echo 'echo "To start Remotion Studio manually:"' >> /start.sh && \
+    echo 'echo "  docker exec -it <container-name> sh"' >> /start.sh && \
+    echo 'echo "  cd /app/remotion-projects/my-template && npm start"' >> /start.sh && \
+    echo 'tail -f /dev/null' >> /start.sh && \
+    chmod +x /start.sh
 
-# Expose ports for n8n and Remotion studio
+# Expose necessary ports
 EXPOSE 5678 3000
 
-# Start the container with startup script
-CMD ["/app/start.sh"]
+# Set default command
+CMD ["/start.sh"]
