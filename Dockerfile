@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 ENV REMOTION_BROWSER_ARGS="--no-sandbox --disable-gpu --disable-software-rasterizer"
-ENV N8N_HOST="0.0.0.0" # <-- ADD THIS LINE
+ENV N8N_HOST="0.0.0.0"
 
 WORKDIR /app
 
