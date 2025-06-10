@@ -38,8 +38,8 @@ RUN npm install @remotion/media-utils @remotion/shapes @remotion/transitions
 WORKDIR /app
 
 # Copy the start script and make it executable
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+COPY start.sh .start.sh
+RUN chmod +x .start.sh
 
 EXPOSE 5678 3000
 
