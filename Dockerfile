@@ -1,53 +1,43 @@
-FROM node:18-alpine
+FROM node:18-bullseye-slim
 
-# Install dependencies
-RUN apk add --no-cache \
+# Install dependencies for chromium to run
+RUN apt-get update && apt-get install -y \
     python3 \
-    py3-pip \
     ffmpeg \
     chromium \
-    nss \
-    harfbuzz \
     ca-certificates \
-    ttf-freefont \
-    bash \
-    curl \
-    git \
-    && rm -rf /var/cache/apk/*
+    fonts-liberation \
+    libnss3 \
+    libxss1 \
+    libasound2 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libgtk-3-0 \
+    libx11-xcb1 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libgbm1 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set environment variables
+# Set env vars (adjust if needed)
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-# Set working directory
+# Continue as you had...
 WORKDIR /app
 
-# Install global packages
 RUN npm install -g n8n@latest @remotion/cli@latest
 
-# Copy your local Remotion project into the container
 COPY remotion-projects/remotion-template /app/remotion-projects/my-template
 
-# Install dependencies inside Remotion project
 WORKDIR /app/remotion-projects/my-template
 RUN npm install @remotion/media-utils @remotion/shapes @remotion/transitions
 
-# Go back to app root
 WORKDIR /app
 
-# Create a reliable startup script
-RUN echo '#!/bin/sh' > /start.sh && \
-    echo 'echo "Starting n8n..."' >> /start.sh && \
-    echo 'n8n start &' >> /start.sh && \
-    echo 'echo "n8n started on port 5678"' >> /start.sh && \
-    echo 'echo "To start Remotion Studio manually:"' >> /start.sh && \
-    echo 'echo "  docker exec -it <container-name> sh"' >> /start.sh && \
-    echo 'echo "  cd /app/remotion-projects/my-template && npm start"' >> /start.sh && \
-    echo 'tail -f /dev/null' >> /start.sh && \
-    chmod +x /start.sh
+# start.sh same as before
 
-# Expose necessary ports
 EXPOSE 5678 3000
 
-# Set default command
 CMD ["/start.sh"]
