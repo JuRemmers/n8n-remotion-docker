@@ -58,8 +58,8 @@ RUN mkdir -p /app/downloads
 
 # Set n8n related environment variables
 # N8N_HOST and N8N_PORT are used by the n8n start command in start.sh
-ENV N8N_WEBHOOK_URL="http://localhost:5678" # Adjust for your public URL on Railway (e.g., https://${RAILWAY_PUBLIC_DOMAIN})
-ENV N8N_DATA_FOLDER="/home/node/.n8n" # Default n8n data folder, important for Railway volume
+ENV N8N_WEBHOOK_URL="n8n-remotion-docker-production.up.railway.app"
+ENV N8N_DATA_FOLDER="/home/node/.n8n" 
 
 # Environment variables for Puppeteer/Remotion if needed to override browser path
 # npx remotion browser ensure usually handles this, so these might not be strictly necessary,
