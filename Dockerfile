@@ -1,7 +1,9 @@
 FROM node:18-bullseye-slim
 
+# install system packages + Python + pip (+ yt-dlp via pip)
 RUN apt-get update && apt-get install -y \
     python3 \
+    python3-pip \                # <<< add pip so we can pip-install yt-dlp
     ffmpeg \
     chromium \
     ca-certificates \
@@ -17,6 +19,7 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     libgbm1 \
+    && pip3 install --no-cache-dir -U yt-dlp \   # <<< install the latest yt-dlp
     && rm -rf /var/lib/apt/lists/*
 
 # Set environment variables for Puppeteer and n8n
@@ -43,5 +46,4 @@ RUN chmod +x /start.sh
 
 EXPOSE 5678 3000
 
-# Use ENTRYPOINT to run the script. This is the clearest way.
 ENTRYPOINT ["/start.sh"]
