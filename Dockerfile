@@ -1,4 +1,4 @@
-FROM node:18-bullseye-slim
+FROM node:20-bullseye-slim
 
 # install system packages + Python + pip (+ yt-dlp via pip)
 RUN apt-get update && apt-get install -y \
@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     libgbm1 \
+    curl \
     && pip3 install --no-cache-dir -U yt-dlp \ 
     && rm -rf /var/lib/apt/lists/*
 
@@ -33,7 +34,6 @@ WORKDIR /app
 RUN npm install -g n8n@latest @remotion/cli@latest
 
 COPY remotion-projects/remotion-template /app/remotion-projects/my-template
-
 WORKDIR /app/remotion-projects/my-template
 RUN npm install @remotion/media-utils @remotion/shapes @remotion/transitions
 
