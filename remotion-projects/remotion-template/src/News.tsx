@@ -11,8 +11,8 @@ import styled from 'styled-components';
 // Load the custom font using Remotion's Google Fonts utility
 loadFont();
 
-// Define props for a single News Scene (this remains the same)
-type NewsSceneProps = {
+// To this (add export):
+export type NewsSceneProps = {
   headlineText: string;
   videoSrc: string;
 };
