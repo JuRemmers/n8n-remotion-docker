@@ -12,4 +12,4 @@ echo "  npm start"
 echo ""
 
 # Start n8n in foreground (this keeps the container alive)
-exec n8n start --host=0.0.0.0 --port=5678
+exec n8n start
