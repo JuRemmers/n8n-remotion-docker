@@ -7,6 +7,7 @@ import {
 import { loadFont } from '@remotion/google-fonts/FacultyGlyphic';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
+import { staticFile } from 'remotion';
 
 // Load the custom font using Remotion's Google Fonts utility
 loadFont();
@@ -75,7 +76,7 @@ export const NewsScene: React.FC<NewsSceneProps> = ({
 }) => {
   return (
     <Container>
-      <BackgroundVideo src={videoSrc} muted />
+      <BackgroundVideo src={staticFile({videoSrc})} muted />
       <NewsCard>
         <NewsHeader
           initial={{ x: '-100%' }}
