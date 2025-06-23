@@ -1,4 +1,4 @@
-FROM node:20-bullseye-slim
+tFROM node:20-bullseye-slim
 
 # install system packages + Python + pip (+ yt-dlp via pip)
 RUN apt-get update && apt-get install -y \
@@ -35,7 +35,7 @@ RUN npm install -g n8n@latest @remotion/cli@latest
 
 COPY remotion-projects/remotion-template /app/remotion-projects/my-template
 WORKDIR /app/remotion-projects/my-template
-RUN npm install @remotion/media-utils @remotion/shapes @remotion/transitions
+RUN npm install @remotion/media-utils @remotion/shapes @remotion/transitions @remotion/google-fonts framer-motion stylized-components
 
 # Return to the main app directory
 WORKDIR /app
