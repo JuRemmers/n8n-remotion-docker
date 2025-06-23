@@ -1,4 +1,5 @@
 import React from 'react';
+import { staticFile } from 'remotion';
 import { Composition } from 'remotion';
 import { PagesComp, DataSchema } from './Pages';
 import { MyComposition } from "./Composition";
@@ -50,6 +51,3 @@ export const RemotionRoot: React.FC = () => {
     />
   </>
 );
-    </>
-  );
-};
