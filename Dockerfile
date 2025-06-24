@@ -1,10 +1,18 @@
 FROM node:20-bookworm-slim
+
+# Add Google Chrome repository
+RUN apt-get update && apt-get install -y \
+    wget \
+    gnupg \
+    && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg \
+    && sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+
 # install system packages + Python + pip (+ yt-dlp via pip)
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \            
     ffmpeg \
-    chromium-browser \
+    google-chrome-stable \
     ca-certificates \
     fonts-liberation \
     libnss3 \
@@ -24,7 +32,7 @@ RUN apt-get update && apt-get install -y \
 
 # Set environment variables for Puppeteer and n8n
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 ENV REMOTION_BROWSER_ARGS="--no-sandbox --disable-gpu --disable-software-rasterizer"
 ENV N8N_HOST="0.0.0.0"
 
