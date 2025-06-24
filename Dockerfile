@@ -1,4 +1,4 @@
-FROM node:20-bullseye-slim
+FROM node:20-bookworm-slim
 
 # install system packages + Python + pip (+ yt-dlp via pip)
 RUN apt-get update && apt-get install -y \
