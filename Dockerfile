@@ -5,11 +5,12 @@ FROM node:20-bookworm-slim
 # Install system packages. Replaced 'chromium' with 'chromium-browser'.
 # Added --no-install-recommends for smaller image.
 # Sorted packages for readability.
+# IMPORTANT: All lines in the apt-get install block must end with '\' except the last package.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     ca-certificates \
-    chromium-browser \  # Corrected package name for Bookworm
-    curl \
+    chromium-browser \
+    curl \                # <--- THIS IS THE LINE THAT WAS MISFORMED. IT NEEDS A '\'
     ffmpeg \
     fonts-liberation \
     libasound2 \
@@ -24,7 +25,7 @@ RUN apt-get update && \
     libxrandr2 \
     libxss1 \
     python3 \
-    python3-pip \
+    python3-pip \         # <--- LAST PACKAGE IN LIST, NO '\' NEEDED HERE
     # Clean up apt cache to keep image small
     && rm -rf /var/lib/apt/lists/* \
     # Install yt-dlp after python and pip are ready
@@ -53,7 +54,7 @@ WORKDIR /app/remotion-projects/my-template
 # Install Remotion project dependencies using npm ci for reproducibility
 # Ensure @remotion/cli is NOT installed globally, but as a dev/prod dep in package.json
 # Your package.json already pins Remotion versions, which is good.
-RUN npm ci --omit=dev --loglevel=error # --omit=dev for smaller image, --loglevel for less noise
+RUN npm ci --omit=dev --loglevel=error
 
 # Copy the rest of the Remotion project files, including src/ and public/
 COPY remotion-projects/remotion-template/ .
