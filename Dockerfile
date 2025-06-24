@@ -2,13 +2,12 @@
 FROM node:20-bookworm-slim
 
 # --- Stage 1: Install core system dependencies for rendering and n8n ---
-# Install system packages.
-# ALL LINES IN THIS RUN COMMAND (EXCEPT THE VERY LAST ONE) MUST END WITH '\'
-# AND THERE MUST BE NOTHING (NO SPACES, NO COMMENTS) AFTER THE '\'
+# Removed 'chromium-browser' from the apt-get install list.
+# Puppeteer will now download its own compatible Chromium binary.
+# The 'lib*' packages are still needed as they are common dependencies for ANY headless browser (even Puppeteer's downloaded one).
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     ca-certificates \
-    chromium-browser \
     curl \
     ffmpeg \
     fonts-liberation \
@@ -27,6 +26,12 @@ RUN apt-get update && \
     python3-pip && \
     rm -rf /var/lib/apt/lists/* && \
     pip3 install --no-cache-dir -U yt-dlp
+
+# Set environment variables for Remotion and n8n.
+# CRITICAL: REMOVED PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+# and PUPPETEER_EXECUTABLE_PATH. This tells Puppeteer to download its own Chromium.
+ENV REMOTION_BROWSER_ARGS="--no-sandbox --disable-gpu --disable-software-rasterizer"
+ENV N8N_HOST="0.0.0.0"
 
 # --- Stage 2: Install Global n8n CLI ---
 RUN npm install -g n8n@latest
