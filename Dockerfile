@@ -1,18 +1,10 @@
-FROM node:20-bookworm-slim
-
-# Add Google Chrome repository
-RUN apt-get update && apt-get install -y \
-    wget \
-    gnupg \
-    && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg \
-    && sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-
+FROM node:20-bullseye-slim
 # install system packages + Python + pip (+ yt-dlp via pip)
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \            
     ffmpeg \
-    google-chrome-stable \
+    chromium \
     ca-certificates \
     fonts-liberation \
     libnss3 \
@@ -32,7 +24,32 @@ RUN apt-get update && apt-get install -y \
 
 # Set environment variables for Puppeteer and n8n
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV REMOTION_BROWSER_ARGS="--no-sandbox --disable-gpu --disable-software-rasterizer"
+ENV N8N_HOST="0.0.0.0"
+
+WORKDIR /app
+
+# Install older Remotion version that works with Bullseye/GLIBC 2.31
+RUN npm install -g n8n@latest @remotion/cli@3.3.100
+
+COPY remotion-projects/remotion-template /app/remotion-projects/my-template
+
+WORKDIR /app/remotion-projects/my-template
+
+# Install compatible Remotion packages
+RUN npm install remotion@3.3.100 @remotion/media-utils@3.3.100 @remotion/shapes@3.3.100 @remotion/transitions@3.3.100 @remotion/google-fonts@3.3.100 framer-motion styled-components
+
+# Return to the main app directory
+WORKDIR /app
+
+# Copy the start script and make it executable
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+EXPOSE 5678 3000
+
+ENTRYPOINT ["/start.sh"]
 ENV REMOTION_BROWSER_ARGS="--no-sandbox --disable-gpu --disable-software-rasterizer"
 ENV N8N_HOST="0.0.0.0"
 
