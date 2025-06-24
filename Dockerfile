@@ -2,16 +2,15 @@
 FROM node:20-bookworm-slim
 
 # --- Stage 1: Install core system dependencies for rendering and n8n ---
-# Install system packages. Replaced 'chromium' with 'chromium-browser'.
-# Added --no-install-recommends for smaller image.
-# Sorted packages for readability.
+# Install system packages.
 # ALL LINES IN THIS RUN COMMAND (EXCEPT THE VERY LAST ONE) MUST END WITH '\'
+# AND THERE MUST BE NOTHING (NO SPACES, NO COMMENTS) AFTER THE '\'
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     ca-certificates \
     chromium-browser \
-    curl \                # <--- CORRECTED: This line MUST end with '\'
-    ffmpeg \              # <--- This line MUST end with '\'
+    curl \
+    ffmpeg \
     fonts-liberation \
     libasound2 \
     libatk1.0-0 \
@@ -25,9 +24,9 @@ RUN apt-get update && \
     libxrandr2 \
     libxss1 \
     python3 \
-    python3-pip && \      # <--- This line (the last apt-get argument) MUST end with ' && \'
+    python3-pip && \
     rm -rf /var/lib/apt/lists/* && \
-    pip3 install --no-cache-dir -U yt-dlp # <--- THIS IS THE VERY LAST LINE of the entire RUN block, NO '\' here.
+    pip3 install --no-cache-dir -U yt-dlp
 
 # --- Stage 2: Install Global n8n CLI ---
 RUN npm install -g n8n@latest
