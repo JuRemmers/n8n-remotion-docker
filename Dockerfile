@@ -1,12 +1,21 @@
 FROM node:20-bookworm-slim
 
-# Install system packages + Python + pip (+ yt-dlp via pip)
+# Install basic packages first
 RUN apt-get update && apt-get install -y \
     python3 \
-    python3-pip \            
-    ffmpeg \
-    chromium \
+    python3-pip \
+    curl \
     ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install media packages
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Chromium and dependencies
+RUN apt-get update && apt-get install -y \
+    chromium \
     fonts-liberation \
     libnss3 \
     libxss1 \
@@ -19,11 +28,10 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     libgbm1 \
-    libxfixes3 \
-    curl \
-    && pip3 install --no-cache-dir -U yt-dlp \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Install yt-dlp
+RUN pip3 install --no-cache-dir -U yt-dlp
 
 # Set environment variables for Puppeteer and n8n
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
