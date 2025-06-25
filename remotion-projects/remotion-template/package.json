@@ -6,15 +6,15 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@remotion/cli": "3.3.100",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "remotion": "3.3.100",
-    "tailwindcss": "3.3.3",
-    "@remotion/tailwind": "3.3.100"
+    "@remotion/cli": "4.0.313",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.313",
+    "@remotion/tailwind-v4": "4.0.313",
+    "tailwindcss": "4.0.0"
   },
   "devDependencies": {
-    "@remotion/eslint-config-flat": "3.3.100",
+    "@remotion/eslint-config-flat": "4.0.313",
     "@types/react": "19.0.0",
     "@types/web": "0.0.166",
     "eslint": "9.19.0",
