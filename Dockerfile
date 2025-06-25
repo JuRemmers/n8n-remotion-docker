@@ -4,6 +4,10 @@ FROM node:20-alpine
 RUN apk add --no-cache \
     python3 \
     py3-pip \
+    py3-setuptools \
+    py3-wheel \
+    build-base \
+    python3-dev \
     ffmpeg \
     chromium \
     curl \
@@ -15,7 +19,7 @@ RUN apk add --no-cache \
     ttf-freefont
 
 # Install yt-dlp
-RUN pip3 install --no-cache-dir -U yt-dlp
+RUN python3 -m pip install --no-cache-dir -U yt-dlp
 
 # Set environment variables for Puppeteer and n8n
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
