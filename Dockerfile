@@ -1,8 +1,7 @@
 FROM node:22-bookworm-slim
 
-# Install system packages + Python + pip (+ yt-dlp via pip)
-# Combine all apt-get and pip commands into a single RUN instruction for smaller image layers.
-RUN apt-get update && apt-get install -y \
+# Install system dependencies and Python packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
     ffmpeg \
@@ -21,29 +20,27 @@ RUN apt-get update && apt-get install -y \
     libxrandr2 \
     libgbm1 \
     curl \
-    && pip3 install --no-cache-dir -U yt-dlp \
+    && pip3 install --no-cache-dir --break-system-packages -U yt-dlp \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set environment variables for Puppeteer and n8n
+# Environment variables
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 ENV REMOTION_BROWSER_ARGS="--no-sandbox --disable-gpu --disable-software-rasterizer"
 ENV N8N_HOST="0.0.0.0"
 
+# Set working directory
 WORKDIR /app
 
-# Install n8n globally and the latest Remotion CLI version
+# Install global packages
 RUN npm install -g n8n@latest @remotion/cli@4.0.313
 
-# Copy the Remotion project template
+# Copy Remotion template
 COPY remotion-projects/remotion-template /app/remotion-projects/my-template
 
 WORKDIR /app/remotion-projects/my-template
 
-# Install compatible Remotion packages for the template.
-# All @remotion/* packages should align with the main remotion version.
-# If your remotion-template has its own package.json and package-lock.json,
-# you should replace this with `RUN npm ci`.
+# Install Remotion template dependencies
 RUN npm install remotion@4.0.313 \
             @remotion/media-utils@4.0.313 \
             @remotion/shapes@4.0.313 \
@@ -52,15 +49,15 @@ RUN npm install remotion@4.0.313 \
             framer-motion \
             styled-components
 
-# Return to the main app directory
+# Back to main directory
 WORKDIR /app
 
-# Copy the start script and make it executable
+# Copy and set permissions on startup script
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
-# Expose ports for n8n (5678) and Remotion (3000, typically for local studio or rendering)
+# Expose necessary ports
 EXPOSE 5678 3000
 
-# Set the entrypoint for the container
+# Define startup entrypoint
 ENTRYPOINT ["/start.sh"]
