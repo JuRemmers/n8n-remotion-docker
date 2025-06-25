@@ -59,7 +59,7 @@ COPY remotion-projects/remotion-template /app/remotion-projects/my-template
 
 WORKDIR /app/remotion-projects/my-template
 
-RUN npm install @remotion/media-utils @remotion/shapes @remotion/transitions @remotion/google-fonts framer-motion styled-components
+RUN npm install @remotion/media-utils @remotion/shapes @remotion/transitions @remotion/google-fonts
 
 # Return to the main app directory
 WORKDIR /app
