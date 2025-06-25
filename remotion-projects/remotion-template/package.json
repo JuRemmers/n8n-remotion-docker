@@ -8,7 +8,7 @@
   "dependencies": {
     "@remotion/cli": "3.3.100",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
     "remotion": "3.3.100",
     "tailwindcss": "3.3.3",
     "@remotion/tailwind": "3.3.100"
