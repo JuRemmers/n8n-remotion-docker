@@ -37,8 +37,6 @@ COPY remotion-projects/remotion-template /app/remotion-projects/my-template
 
 WORKDIR /app/remotion-projects/my-template
 
-# Install compatible Remotion packages (some packages may not exist in 3.3.100)
-RUN npm install remotion@3.3.100 @remotion/media-utils@3.3.100 framer-motion styled-components
 
 # Return to the main app directory
 WORKDIR /app
