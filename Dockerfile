@@ -1,8 +1,6 @@
 FROM node:22-bookworm-slim
 # install system packages + Python + pip (+ yt-dlp via pip)
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \            
+RUN apt-get update && apt-get install -y \         
     ffmpeg \
     chromium \
     ca-certificates \
