@@ -19,8 +19,10 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     libgbm1 \
+    libxfixes3 \
     curl \
     && pip3 install --no-cache-dir -U yt-dlp \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Set environment variables for Puppeteer and n8n
