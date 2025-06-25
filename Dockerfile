@@ -1,4 +1,4 @@
-FROM debian:bookworm
+FROM node:22-bookworm-slim
 
 # Install system packages + Python + pip (+ yt-dlp via pip)
 # Combine all apt-get and pip commands into a single RUN instruction for smaller image layers.
