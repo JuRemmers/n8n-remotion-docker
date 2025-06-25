@@ -40,8 +40,8 @@ COPY remotion-projects/remotion-template/package.json remotion-projects/remotion
 # Copy Remotion template source
 COPY remotion-projects/remotion-template/src ./remotion-projects/my-template/src
 
-# Copy public folder if it exists
-COPY remotion-projects/remotion-template/public ./remotion-projects/my-template/public
+# Copy public folder if it exists (optional)
+COPY remotion-projects/remotion-template/public* ./remotion-projects/my-template/ || true
 
 # Install Remotion dependencies
 WORKDIR /app/remotion-projects/my-template
