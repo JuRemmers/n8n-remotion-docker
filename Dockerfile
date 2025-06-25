@@ -17,8 +17,8 @@ RUN apt install -y \
   libcairo2 \
   libcups2
 # Copy everything from your project to the Docker image. Adjust if needed.
-COPY package.json package*.json yarn.lock* pnpm-lock.yaml* bun.lockb* bun.lock* tsconfig.json* remotion.config.* ./
-COPY src ./src
+COPY package.json remotion-projects/remotion-templatepackage*.json yarn.lock* pnpm-lock.yaml* bun.lockb* bun.lock* tsconfig.json* remotion.config.* ./
+COPY src remotion-projects/remotion-template/src
 # If you have a public folder:
 COPY public ./public
 # Install the right package manager and dependencies - see below for Yarn/PNPM
