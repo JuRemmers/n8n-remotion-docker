@@ -28,7 +28,7 @@ ENV REMOTION_BROWSER_ARGS="--no-sandbox --disable-gpu --disable-software-rasteri
 ENV N8N_HOST="0.0.0.0"
 WORKDIR /app
 # Install older Remotion version that works with Bullseye/GLIBC 2.31
-RUN npm install -g n8n@latest @remotion/cli@3.3.100
+RUN npm install -g n8n@latest @remotion/cli@latest
 COPY remotion-projects/remotion-template /app/remotion-projects/my-template
 WORKDIR /app/remotion-projects/my-template
 # Install compatible Remotion packages (some packages may not exist in 3.3.100)
