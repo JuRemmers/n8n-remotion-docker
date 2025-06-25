@@ -1,12 +1,10 @@
-FROM node:20-bullseye-slim
+FROM remotion/dev:4.0.313
 
 # Install system packages + Python + pip (+ yt-dlp via pip)
 # Combine all apt-get and pip commands into a single RUN instruction for smaller image layers.
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
-    ffmpeg \
-    chromium \
     ca-certificates \
     fonts-liberation \
     libnss3 \
