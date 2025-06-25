@@ -33,7 +33,7 @@ ENV N8N_HOST="0.0.0.0"
 WORKDIR /app
 
 # Install n8n globally and the latest Remotion CLI version
-RUN npm install -g n8n@latest @remotion/cli@4.0.319
+RUN npm install -g n8n@latest @remotion/cli@4.0.313
 
 # Copy the Remotion project template
 COPY remotion-projects/remotion-template /app/remotion-projects/my-template
@@ -44,11 +44,11 @@ WORKDIR /app/remotion-projects/my-template
 # All @remotion/* packages should align with the main remotion version.
 # If your remotion-template has its own package.json and package-lock.json,
 # you should replace this with `RUN npm ci`.
-RUN npm install remotion@4.0.319 \
-            @remotion/media-utils@4.0.319 \
-            @remotion/shapes@4.0.319 \
-            @remotion/transitions@4.0.319 \
-            @remotion/google-fonts@4.0.319 \
+RUN npm install remotion@4.0.313 \
+            @remotion/media-utils@4.0.313 \
+            @remotion/shapes@4.0.313 \
+            @remotion/transitions@4.0.313 \
+            @remotion/google-fonts@4.0.313 \
             framer-motion \
             styled-components
 
