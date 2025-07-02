@@ -6,7 +6,7 @@ services:
       - "5678:5678"    # n8n
       - "3000:3000"    # Remotion Studio (if needed)
     volumes:
-      - n8n_data:/home/node/.n8n
+     - n8n_data_app:/app/.n8n
       - ./workflows:/app/workflows
       - ./downloads:/app/downloads
       - ./renders:/app/renders
