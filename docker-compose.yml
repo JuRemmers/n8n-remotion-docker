@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   remotion-n8n:
     build: .
@@ -6,7 +7,7 @@ services:
       - "5678:5678"    # n8n
       - "3000:3000"    # Remotion Studio (if needed)
     volumes:
-     - n8n_data_app:/app/.n8n
+      - n8n_data_app:/app/.n8n # Using the named volume
       - ./workflows:/app/workflows
       - ./downloads:/app/downloads
       - ./renders:/app/renders
@@ -17,10 +18,15 @@ services:
       - N8N_PROTOCOL=http
       - GENERIC_TIMEZONE=UTC
       - NODE_ENV=production
-      - WEBHOOK_URL=http://localhost:5678/
+      - WEBHOOK_URL=http://localhost:5678/ 
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5678/healthz"]
       interval: 30s
       timeout: 10s
       retries: 5
+
+volumes: # <--- THIS IS WHAT WAS MISSING
+  n8n_data_app: # Definition of the named volume
+    # driver: local # Default driver, you can specify if needed
+    # name: my-custom-n8n-volume # Optional: if you want a specific name for Docker CLI
