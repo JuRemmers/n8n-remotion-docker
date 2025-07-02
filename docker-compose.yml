@@ -7,11 +7,6 @@ services:
       - "5678:5678"    # n8n
       - "3000:3000"    # Remotion Studio (if needed)
     volumes:
-      - n8n_data_app:/app/.n8n # Using the named volume
-      - ./workflows:/app/workflows
-      - ./downloads:/app/downloads
-      - ./renders:/app/renders
-      - ./remotion-projects:/app/remotion-projects
     environment:
       - N8N_HOST=0.0.0.0
       - N8N_PORT=5678
@@ -19,6 +14,8 @@ services:
       - GENERIC_TIMEZONE=UTC
       - NODE_ENV=production
       - WEBHOOK_URL=http://localhost:5678/ 
+      - N8N_USER_FOLDER=/app/.n8n         
+      - DB_SQLITE_DATABASE=/app/.n8n/database.sqlite  
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5678/healthz"]
