@@ -12,8 +12,13 @@ import {
 import { z } from "zod";
 import { zColor } from "@remotion/zod-types";
 import { useRef, useLayoutEffect, useState } from "react";
+import {CameraMotionBlur} from '@remotion/motion-blur';
+import { loadFont } from '@remotion/google-fonts/FacultyGlyphic';
 
 // --- START: Styles ---
+
+// Load the font
+const { fontFamily } = loadFont();
 
 export const newsCardStyles = {
   newsCard: {
@@ -38,6 +43,7 @@ export const newsCardStyles = {
     display: 'flex',
     flexDirection: 'column',
     gap: 20,
+    fontFamily,
   },
   breaking: {
     color: 'white',
@@ -47,11 +53,24 @@ export const newsCardStyles = {
     display: 'inline-block',
     fontSize: 24,
 	lineHeight: 0,
+    fontFamily,
   },
   headline: {
     fontWeight: 'bold',
     fontSize: 40,
     textWrap: 'wrap',
+    fontFamily,
+  },
+  // New gradient overlay style
+  gradientOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 30%, rgba(0, 0, 0, 0) 60%)',
+    zIndex: 0.5,
+    pointerEvents: 'none',
   },
 };
 
@@ -148,36 +167,38 @@ export const NewsVideo: React.FC<z.infer<typeof newsCardProps>> = (props) => {
 	 <Audio loop src={staticFile('backgroundMusic.wav')} />
       {/* First Sequence */}
       <Sequence from={0} durationInFrames={totalDuration}>
-	  
-        <NewsCardAnimated headlineText={headline1} /> 
         <OffthreadVideo
           muted
           style={{ zIndex: 0, transform: 'translateY(-150px)', height: 2300, objectFit: "cover" }} 
           src={staticFile(video1Src)}
           startFrom={0}
         />
+        <div style={newsCardStyles.gradientOverlay} />
+        <NewsCardAnimated headlineText={headline1} /> 
       </Sequence>
 
       {/* Second Sequence */}
       <Sequence from={totalDuration} durationInFrames={totalDuration}>
-        <NewsCardAnimated headlineText={headline2} />
         <OffthreadVideo
           muted
-          style={{ height: 1920, objectFit: "cover" }}
+          style={{ zIndex: 0, transform: 'translateY(-150px)', height: 2300, objectFit: "cover" }} 
           src={staticFile(video2Src)}
           startFrom={0}
         />
+        <div style={newsCardStyles.gradientOverlay} />
+        <NewsCardAnimated headlineText={headline2} />
       </Sequence>
 
       {/* Third Sequence */}
       <Sequence from={totalDuration*2} durationInFrames={totalDuration}>
-        <NewsCardAnimated headlineText={headline3} />
         <OffthreadVideo
           muted
-          style={{ height: 1920, objectFit: "cover" }}
+          style={{ zIndex: 0, transform: 'translateY(-150px)', height: 2300, objectFit: "cover" }} 
           src={staticFile(video3Src)}
           startFrom={0}
         />
+        <div style={newsCardStyles.gradientOverlay} />
+        <NewsCardAnimated headlineText={headline3} />
       </Sequence>	  
     </AbsoluteFill>
   );
